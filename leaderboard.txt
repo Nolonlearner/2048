@@ -1,0 +1,9 @@
+adadaaaa 1210
+xxx 720
+asdad 710
+sdsd 330
+player1 22
+player2 21
+player3 20
+player4 19
+player5 15
