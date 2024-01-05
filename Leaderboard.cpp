@@ -71,7 +71,7 @@ void Leaderboard::loadScoresFromFile()
 {
     // 从文件加载排行榜信息
     std::string filePath = FileUtils::getInstance()->fullPathForFilename("leaderboard.txt");
-
+    log("load File : %s", filePath.c_str());
     // 以文本方式读取文件
     std::string fileContents = FileUtils::getInstance()->getStringFromFile(filePath);
 
@@ -103,42 +103,25 @@ void Leaderboard::loadScoresFromFile()
 
 void Leaderboard::saveScoresToFile()
 {
-    std::string writablePath = FileUtils::getInstance()->getWritablePath();
-
-    // 在可写入路径下创建leaderboard.txt的完整路径
-    std::string writableFilePath = writablePath + "leaderboard.txt";
-
+    
+    // 获取工程文件夹中leaderboard.txt的完整路径
+    std::string filePath = cocos2d::FileUtils::getInstance()->fullPathForFilename("leaderboard.txt");
+    log("saved File : %s", filePath.c_str());
     // 将排行榜数据转换为文本格式
     std::string fileContents;
     for (const auto& entry : scores)
     {
-        fileContents += StringUtils::format("%s %d\n", entry->getPlayerName().getCString(), entry->getScore());
+        fileContents += cocos2d::StringUtils::format("%s %d\n", entry->getPlayerName().getCString(), entry->getScore());
     }
 
     // 使用 FileUtils 写入文件
-    if (FileUtils::getInstance()->writeStringToFile(fileContents, writableFilePath))
+    if (cocos2d::FileUtils::getInstance()->writeStringToFile(fileContents, filePath))
     {
-        // 清除文件缓存，确保文件被写入磁盘
-        FileUtils::getInstance()->purgeCachedEntries();
-
-        log("File saved successfully: %s", writableFilePath);
-
-        // 获取资源文件夹中的文件路径
-        std::string resourceFilePath = "leaderboard.txt";
-
-        // 重命名或移动文件
-        if (FileUtils::getInstance()->renameFile(writableFilePath, resourceFilePath))
-        {
-            log("File moved successfully to resource folder: %s", resourceFilePath.c_str());
-        }
-        else
-        {
-            log("Failed to move file to resource folder: %s", resourceFilePath.c_str());
-        }
+        cocos2d::log("File saved successfully: %s", filePath.c_str());
     }
     else
     {
-        log("Failed to save file: %s", writableFilePath.c_str());
+        cocos2d::log("Failed to save file: %s", filePath.c_str());
     }
 }
 
